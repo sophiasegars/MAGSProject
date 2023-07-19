@@ -16,8 +16,21 @@
         </svg>
     </g> -->
     <svg width="10000" height="10000" viewport="8000 6000">
-        <circle r="60" cx="400" cy="300" fill="red"></circle>
-        
+        <!-- <circle r="60" cx="400" cy="300" fill="red"></circle> -->
+        <use id="redGhost" x="200" y="200" href="#ghost" fill="red"/>
+        <defs>
+            <g id="ghost">
+                <circle cx="60" cy="60" r="60"/>
+                <rect  x="0" y="60" width="120" height="100"/>
+                <circle cx="20" cy="160" r="20"/>
+                <circle cx="60" cy="160" r="20"/>
+                <circle cx="100" cy="160" r="20"/>
+                <circle cx="35" cy="60" r="25" fill="white" />
+                <circle cx="85" cy="60" r="25" fill="white" />
+                <circle cx="40" cy="60" r="15" fill="blue" />
+                <circle cx="90" cy="60" r="15" fill="blue" />
+            </g>
+        </defs>
     </svg>
     <svg id="canvas" viewbox="100vh 100vh"></svg>
     <script>
@@ -37,13 +50,32 @@
 
 
 
-
+        let group = document.getElementsByTagName("g")
         
         // Hello from myra
         //You'll need to create two event listeners.
+        let svg = document.getElementsByTagName("svg")[0]
+        svg.addEventListener('click', teleport, false);
+        // let circle = document.getElementsByTagName("circle")[0];
+let ghost = document.getElementById("redGhost");
+        canvas.addEventListener("click", addGhost, false);
 
-    
+        function teleport(event) {
+            ghost.setAttribute("x", (Number(event.offsetX) - 60).toString());
+            ghost.setAttribute("y", (Number(event.offsetY) - 120).toString());
+        }
 
+        function addClass(){
+            let element = document.getElementById('id1');
+            element.classList.add
+        }
+
+        function addGhost(event){
+            let x = Number(circle.getAttribute("cx"));
+            let y = Number(circle.getAttribute("cy"));
+
+            
+        }
         /* You'll need a click event listener on the canvas that draws a randomly
         colored ghost at the precise location of the click and places a JavaScript
         reference to that ghost into the ghosts array*/
