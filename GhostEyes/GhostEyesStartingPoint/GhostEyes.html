@@ -25,8 +25,9 @@
 // Hello from myra
         //You'll need to create two event listeners.
  canvas.addEventListener("click", addGhost, false);
- function addGhost(){
-    
+ function addGhost(event){
+    let ghost = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    ghost
  }
         /* You'll need a click event listener on the canvas that draws a randomly
         colored ghost at the precise location of the click and places a JavaScript
