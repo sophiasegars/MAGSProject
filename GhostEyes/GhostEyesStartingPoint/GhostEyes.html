@@ -16,23 +16,9 @@
         </svg>
     </g> -->
     <svg width="10000" height="10000" viewport="8000 6000">
-
         <!-- <circle r="60" cx="400" cy="300" fill="red"></circle> -->
-        <use id="redGhost" x="200" y="200" href="#ghost" fill="red"/>
-        <defs>
-            <g id="ghost">
-                <circle cx="60" cy="60" r="60"/>
-                <rect  x="0" y="60" width="120" height="100"/>
-                <circle cx="20" cy="160" r="20"/>
-                <circle cx="60" cy="160" r="20"/>
-                <circle cx="100" cy="160" r="20"/>
-                <circle cx="35" cy="60" r="25" fill="white" />
-                <circle cx="85" cy="60" r="25" fill="white" />
-                <circle cx="40" cy="60" r="15" fill="blue" />
-                <circle cx="90" cy="60" r="15" fill="blue" />
-            </g>
-        </defs>
-
+   
+    
     </svg>
     <svg id="canvas" viewbox="100vh 100vh"></svg>
     <script>
@@ -47,35 +33,108 @@
         let bodyWidth = 2 * headRadius;
         let bodyHeight = 100;
         let eyeSpacing = 25; //from center of head
+        let ds = eyeRadius - pupilRadius;
+
 
         // -1 head radius AND click -1 head radius 
 
+
+
+        let group = document.getElementsByTagName("g")
+        
         // Hello from myra
         //You'll need to create two event listeners.
         let svg = document.getElementsByTagName("svg")[0]
-        svg.addEventListener('click', teleport, false);
-
+        // svg.addEventListener('click', teleport, false);
         // let circle = document.getElementsByTagName("circle")[0];
-let ghost = document.getElementById("redGhost");
-        canvas.addEventListener("click", addGhost, false);
+const ghost = document.getElementById("redGhost");
+        document.addEventListener('click', addGhost, false);
+        document.addEventListener('mousemove', moveEyes, false);
 
-        function teleport(event) {
-            ghost.setAttribute("x", (Number(event.offsetX) - 60).toString());
-            ghost.setAttribute("y", (Number(event.offsetY) - 120).toString());
+        // function teleport(event) {
+        //     ghost.setAttribute("x", (Number(event.offsetX) - 60).toString());
+        //     ghost.setAttribute("y", (Number(event.offsetY) - 120).toString());
+        // }
+        function moveEyes(event){
+            // pupilLeft.setAttribute("cx", event.offsetX)
+            // pupilLeft.setAttribute("cy", event.offsetY)
+            // pupilRight.setAttribute("cx", event.offsetX)
+            // pupilRight.setAttribute("cy", event.offsetY)
+            for (let ghost of ghosts){
+                let circles = ghost.getElementsByTagName("circle");
+                let lEye = circles[1];
+                let rEye = circles[2];
+                let lPupil = circles[4]
+                let rPupil = circles[3];
+                let tx = event.offsetX;
+                let ty = event.offsetY;
+                let ox = Number(lEye.getAttribute("cx"));
+                let oy = Number(lEye.getAttribute("cy"));
+                let dx = 0;
+                let dy = 0;
+                if(ox == tx) {
+                    dy = Math.sign(ty - oy) * ds
+                } else {
+                    let m = (ty - oy) / (tx - ox);
+                    dx = Math.sign(tx - ox) * ds / Math.sqrt(1 + m * m);
+                    dy = m * dx;
+                }
+                lPupil.setAttribute("cx", ox + dx);
+                lPupil.setAttribute("cy", oy + dy);
+                
+                let px = Number(rEye.getAttribute("cx"));
+                let py = Number(rEye.getAttribute("cy"));
+                if(px == tx) {
+                    dy = Math.sign(ty -py) * ds
+                } else {
+                    let m = (ty - py) / (tx - px);
+                    dx = Math.sign(tx - px) * ds / Math.sqrt(1 + m * m);
+                    dy = m * dx;
+                }
+                rPupil.setAttribute("cx", px + dx);
+                rPupil.setAttribute("cy", py + dy);
 
-     
-        
 
-        function addClass(){
-            let element = document.getElementById('id1');
-            element.classList.add
+                
+
+            }
+
         }
 
+        // function addClass(){
+        //     let element = document.getElementById('id1');
+        //     element.classList.add
+        // }
         function addGhost(event){
-            let x = Number(circle.getAttribute("cx"));
-            let y = Number(circle.getAttribute("cy"));
-
+            let x = event.offsetX;
+            let y = event.offsetY;
+            let ghostBody = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+            let color = colors[Math.floor(colors.length * Math.random())]
+            let ghost = document.createElementNS("http://www.w3.org/2000/svg", 'g')
+            let pupilRight = createCircle(x - eyeSpacing, y, 2, 'blue')
+            let pupilLeft = createCircle(x + eyeSpacing, y, 2, 'blue')
+          canvas.appendChild(ghost);
+          ghost.appendChild(createCircle(x, y, 60, color));
+          ghost.appendChild(createCircle(x - eyeSpacing, y, 20, 'white'))
+          ghost.appendChild(createCircle(x + eyeSpacing, y, 20, 'white'))
+          ghost.appendChild(pupilLeft)
+          ghost.appendChild(pupilRight)
+          ghosts.push(ghost)
+        //   ghost.appendChild(ghostBody.setAttribute("width", 120));
+        //   ghost.appendChild(ghostBody.setAttribute("height", 100))
+        //   ghost.appendChild(ghostBody.setAttribute("x", x))
+        //   ghost.appendChild(ghostBody.setAttribute("y", y - 60))
             
+                    
+        }
+
+        function createCircle(CX, CY, R, COLOR){
+            let cir = document.createElementNS("http://www.w3.org/2000/svg",'circle');
+            cir.setAttribute("cx", CX)
+            cir.setAttribute("cy", CY)
+            cir.setAttribute("r", R);
+            cir.setAttribute("fill", COLOR);
+            return cir;
         }
         /* You'll need a click event listener on the canvas that draws a randomly
         colored ghost at the precise location of the click and places a JavaScript
