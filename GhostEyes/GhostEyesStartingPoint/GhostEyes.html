@@ -16,6 +16,7 @@
         </svg>
     </g> -->
     <svg width="10000" height="10000" viewport="8000 6000">
+
         <!-- <circle r="60" cx="400" cy="300" fill="red"></circle> -->
         <use id="redGhost" x="200" y="200" href="#ghost" fill="red"/>
         <defs>
@@ -31,6 +32,7 @@
                 <circle cx="90" cy="60" r="15" fill="blue" />
             </g>
         </defs>
+
     </svg>
     <svg id="canvas" viewbox="100vh 100vh"></svg>
     <script>
@@ -48,14 +50,11 @@
 
         // -1 head radius AND click -1 head radius 
 
-
-
-        let group = document.getElementsByTagName("g")
-        
         // Hello from myra
         //You'll need to create two event listeners.
         let svg = document.getElementsByTagName("svg")[0]
         svg.addEventListener('click', teleport, false);
+
         // let circle = document.getElementsByTagName("circle")[0];
 let ghost = document.getElementById("redGhost");
         canvas.addEventListener("click", addGhost, false);
@@ -63,7 +62,9 @@ let ghost = document.getElementById("redGhost");
         function teleport(event) {
             ghost.setAttribute("x", (Number(event.offsetX) - 60).toString());
             ghost.setAttribute("y", (Number(event.offsetY) - 120).toString());
-        }
+
+     
+        
 
         function addClass(){
             let element = document.getElementById('id1');
